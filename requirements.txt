@@ -4,6 +4,7 @@ langchain-google-genai
 faiss-cpu
 python-dotenv
 pydantic
+pydantic-settings
 requests
 pytest
 httpx
