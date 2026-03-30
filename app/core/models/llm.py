@@ -1,10 +1,10 @@
 from langchain_google_genai import GoogleGenerativeAI
 from langchain_core.language_models import BaseChatModel
 
-from app.core.config.settings import Settings
+from app.core.config.settings import settings
 
 def get_llm() -> BaseChatModel:
-    settings = Settings()
+
     return GoogleGenerativeAI(
         model=settings.MODEL,
         temperature=0.7,

@@ -1,9 +1,13 @@
-from app.core.models.llm import get_llm
-
+from app.agents.chat_agent.schema import ChatInput
+from app.agents.chat_agent.agent import ChatAgent
 
 def main():
-    llm = get_llm()
-    response = llm.invoke("Hello, how are you?")
+    agent = ChatAgent()
+
+    response = agent.run(
+        ChatInput(question="How can I train combat efficiently?")
+    )
+    
     print(response)
 
 if __name__ == "__main__":
