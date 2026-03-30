@@ -1,11 +1,17 @@
-from dotenv import load_dotenv
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-load_dotenv()
+class Settings(BaseSettings):
+    PROVIDER: str
+    GOOGLE_API_KEY: str
+    MODEL: str
+    EMBEDDING_MODEL: str
+    TAVILY_API_KEY: str
 
-class Settings:
-    PROVIDER = os.getenv("PROVIDER")
-    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-    MODEL = os.getenv("MODEL")
-    EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
-    TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+
+
+settings = Settings()
