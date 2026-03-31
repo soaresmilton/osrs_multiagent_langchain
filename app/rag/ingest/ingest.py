@@ -19,11 +19,11 @@ def run_ingestion(
     """
 
     print("Loading documents...")
-    documents: List[Documents] = load_txt_files(datah_path)
+    documents: List[Document] = load_txt_files(datah_path)
     print(f"Loaded {len(documents)} documents.")
 
     print("Splitting documents...")
-    chunks: List[Documents] = split_documents(documents)
+    chunks: List[Document] = split_documents(documents)
     print(f"Generated {len(chunks)} chunks.")
 
     print("Creating vector store...")

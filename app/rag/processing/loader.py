@@ -13,9 +13,9 @@ def load_txt_files(path: str) -> List[Document]:
         raise ValueError("Path does not exist: {path}")
 
     documents: List[Document] = []
-    
+
     for file_path in base_path.glob("*.txt"):
-        content = file_path.read_text(encoding="urf-8")
+        content = file_path.read_text(encoding="utf-8")
 
         doc = Document(
             page_content=content,
