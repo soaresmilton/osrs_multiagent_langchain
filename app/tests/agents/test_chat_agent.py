@@ -4,7 +4,7 @@ from app.agents.chat_agent.schema import ChatInput
 def test_chat_agent_basic_response():
     agent = ChatAgent
     result = agent.run(
-        ChatInput(question="What is the best skill for making money in OSRS?")
+        input_data=ChatInput(question="What is the best skill for making money in OSRS?")
     )
 
     assert isinstance(result, str)
@@ -14,7 +14,7 @@ def test_chat_agent_no_player_data_fabrication():
     agent = ChatAgent()
 
     result = agent.run(
-        ChatInput(question="What are my stats?")
+        input_data=ChatInput(question="What are my stats?")
     )
 
     assert "don't have access" in result.lower() or "cannot" in result.lower()
