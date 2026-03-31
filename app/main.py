@@ -1,14 +1,6 @@
-from app.agents.chat_agent.schema import ChatInput
-from app.agents.chat_agent.agent import ChatAgent
-
+from app.rag.ingest.ingest import run_ingestion
 def main():
-    agent = ChatAgent()
-
-    response = agent.run(
-        ChatInput(question="How can I train combat efficiently?")
-    )
-    
-    print(response)
+    run_ingestion()
 
 if __name__ == "__main__":
     main()
