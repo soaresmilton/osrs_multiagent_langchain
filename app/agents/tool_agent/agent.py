@@ -1,22 +1,51 @@
 from app.agents.tool_agent.schema import ToolAgentInput
 from app.tools.templeosrs.service import TempleOsrsService
+from app.agents.tool_agent.selector import ToolSelector
+from app.core.models.response import AgentResponse
+from app.core.utils.parsing import extract_username
 
 class ToolAgent:
     def __init__(self):
         self.service = TempleOsrsService()
+        self.selector = ToolSelector()
     
-    def run(self, input_data: ToolAgentInput) -> str:
-        if input_data.tool_name == 'player_stats':
-            result = self.service.get_player_stats(username=input_data.username)
+    def run(self, input_data: ToolAgentInput) -> AgentResponse:
+        question = input_data.question
 
-        elif input_data.tool_name == 'player_info':
-            result = self.service.get_player_info(username=input_data.username)
+        # 1 - Escolher tool:
+        tool_name = self.selector.select(question)
+
+        # 2 - extrair username
+        username = extract_username(question)
+
+        if not username: 
+            return AgentResponse(
+                answer="Could not identify username in your question.",
+                source="tool",
+                success= False
+            )
+
+        # 3 - Executar tool
+        if tool_name == 'player_stats':
+            result = self.service.get_player_stats(username=username)
+
+        elif tool_name == 'player_info':
+            result = self.service.get_player_info(username=username)
         
         else: 
-            return "Unknown tool requested"
+            return "Unknown tool."
         
 
         if not result.success:
-            return f"Error: {result.error}"
+            return AgentResponse(
+                answer={result.error},
+                source="tool",
+                success=False
+            )
         
-        return str(result.data)
+        # 5 -formatar a resposta
+        return AgentResponse(
+            answer=str(result.data),
+            source="tool",
+            success=True
+        )
