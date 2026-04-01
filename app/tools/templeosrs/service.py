@@ -7,9 +7,8 @@ class TempleOsrsService:
     
     def get_player_stats(self, username: str) -> ToolResult:
         try:
-
             data = self.client.get_player_stats(username=username)
-
+            
             if not data:
                 return ToolResult(
                     success=False,
