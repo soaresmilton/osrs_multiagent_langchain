@@ -2,7 +2,7 @@ from app.core.models.llm import get_llm
 
 
 TOOL_KEYWORDS = ["stats", "player", "level", "account"]
-RAG_LEYWORDS = ["quest", "guide", "grandmaster", "lore"]
+RAG_KEYWORDS = ["quest", "guide", "grandmaster", "lore"]
 
 class RouterClassifier:
     def __init__(self):
@@ -13,7 +13,7 @@ class RouterClassifier:
 
         if any(k in q for k in TOOL_KEYWORDS):
             return "tool"
-        if any(k in q for k in RAG_LEYWORDS):
+        if any(k in q for k in RAG_KEYWORDS):
             return "rag"
 
         return None
@@ -34,7 +34,12 @@ Question:
 
         response = self.llm.invoke(prompt)
 
-        return response.content.strip.lower()
+        result = response.strip().lower()
+        
+        if result not in {"tool", "rag", "chat"}:
+            return "chat"
+        
+        return result
     
     def classify(self, question: str) -> str:
         rule_result = self._rule_base(question)
