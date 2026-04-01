@@ -2,21 +2,21 @@ from app.agents.tool_agent.schema import ToolAgentInput
 from app.tools.templeosrs.service import TempleOsrsService
 from app.agents.tool_agent.selector import ToolSelector
 from app.core.models.response import AgentResponse
-from app.core.utils.parsing import extract_username
+from app.core.utils.parsing import extract_username_with_context
 
 class ToolAgent:
     def __init__(self):
         self.service = TempleOsrsService()
         self.selector = ToolSelector()
     
-    def run(self, input_data: ToolAgentInput) -> AgentResponse:
+    def run(self, input_data: ToolAgentInput, last_username: str | None = None) -> AgentResponse:
         question = input_data.question
 
         # 1 - Escolher tool:
         tool_name = self.selector.select(question)
 
         # 2 - extrair username
-        username = extract_username(question)
+        username = last_username
 
         if not username: 
             return AgentResponse(

@@ -10,11 +10,16 @@ class ChatAgent:
     def __init__(self):
         self.llm = get_llm()
     
-    def run(self, input_data: ChatInput) -> AgentResponse:
+    def run(self, input_data: ChatInput, history: list[str] = None) -> AgentResponse:
         messages = [
-            SystemMessage(content=SYSTEM_PROMPT),
-            HumanMessage(content=input_data.question)
+            SystemMessage(content=SYSTEM_PROMPT)
         ]
+        if history:
+            for h in history[-5:]:
+                messages.append(HumanMessage(content=h))
+
+        messages.append(HumanMessage(content=input_data.question))
+
         response = self.llm.invoke(messages)
         return AgentResponse(
             answer=response,
