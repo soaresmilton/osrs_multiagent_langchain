@@ -46,25 +46,27 @@ def rag_node(state: TypedDict) -> TypedDict:
         )
     )
 
-    return {**state, "response": response}
+    if not response.success:
+        chat_result = chat_agent.run(
+            ChatInput(question=state['question'])
+        )
 
+        return {**state, "response": chat_result.answer}
+    
+    return {**state, "response": response.answer}
 
 def tool_node(state: TypedDict) -> TypedDict:
-
-    question = state['question']
-    username = extract_username(question)
-
-    if not username:
-        return {
-            **state,
-            "response": "Could not identify username in your question."
-        }
     
     response = tool_agent.run(
         ToolAgentInput(
-            tool_name="player_stats",
-            username=username
+            question=state['question']
         )
     )
 
-    return {**state, "response": response}
+    if not response.success:
+        return {
+            **state,
+            "response": f"Tool error: {response.answer}"
+        }
+
+    return {**state, "response": response.answer}
