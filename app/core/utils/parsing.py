@@ -40,3 +40,14 @@ Question:
         return None
     
     return result
+
+def extract_username_with_context(
+    question: str,
+    last_username: Optional[str]
+) -> Optional[str]:
+    username = extract_username(question)
+
+    if username:
+        return username
+
+    return last_username
