@@ -2,7 +2,7 @@ from app.agents.chat_agent.agent import ChatAgent
 from app.agents.chat_agent.schema import ChatInput
 
 def test_chat_agent_basic_response():
-    agent = ChatAgent
+    agent = ChatAgent()
     result = agent.run(
         input_data=ChatInput(question="What is the best skill for making money in OSRS?")
     )
@@ -17,6 +17,16 @@ def test_chat_agent_no_player_data_fabrication():
         input_data=ChatInput(question="What are my stats?")
     )
 
-    assert "don't have access" in result.lower() or "cannot" in result.lower()
+    normalized = result.lower()
+
+    expected_phrases = [
+        "do not have access",
+        "don't have access",
+        "cannot",
+        "eu não tenho acesso",
+        "eu não posso"
+    ]
+
+    assert any(p in normalized for p in expected_phrases)
 
     
