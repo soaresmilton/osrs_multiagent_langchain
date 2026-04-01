@@ -1,3 +1,4 @@
+from app.core.utils.parsing import extract_username_with_context
 from typing import TypedDict
 
 from app.agents.router.agent import RouterAgent
@@ -33,10 +34,19 @@ def chat_node(state: TypedDict) -> TypedDict:
     response = chat_agent.run(
         ChatInput(
             question=state['question']
-        )
+        ),
+        history=state.get('history', [])
     )
 
-    return {**state, "response":response}
+    history = state.get('history', [])
+    history.append(state['question'])
+
+
+    return {
+        **state, 
+        "response":response.answer,
+        "history": history
+        }
 
 
 def rag_node(state: TypedDict) -> TypedDict:
@@ -56,11 +66,20 @@ def rag_node(state: TypedDict) -> TypedDict:
     return {**state, "response": response.answer}
 
 def tool_node(state: TypedDict) -> TypedDict:
-    
+    question = state['question']
+    last_username = state.get('last_username')
+
+    username = extract_username_with_context(
+        question,
+        last_username
+    )
+
     response = tool_agent.run(
         ToolAgentInput(
-            question=state['question']
-        )
+            question=question
+        ),
+        last_username=username
+        
     )
 
     if not response.success:
@@ -69,4 +88,4 @@ def tool_node(state: TypedDict) -> TypedDict:
             "response": f"Tool error: {response.answer}"
         }
 
-    return {**state, "response": response.answer}
+    return {**state, "response": response.answer, "last_username": username}
