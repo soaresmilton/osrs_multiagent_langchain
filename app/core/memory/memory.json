@@ -1,0 +1,13 @@
+{
+  "7dcece6e-6982-43f8-b320-0a1383d1fc17": {
+    "question": "what is his account info?",
+    "route": "tool",
+    "response": "{'data': {'Username': 'Hoom Pk', 'Country': '-', 'Game mode': 0, 'GIM': 0, 'fresh_start_account': 0, 'Cb-3': 0, 'F2p': 0, 'Banned': 0, 'Disqualified': 0, 'Clan preference': None, 'Last checked': '2026-04-01 18:55:33', 'Last changed': '2026-04-01 18:55:33', 'Last changed KC': '2026-04-01 18:55:33', 'Datapoint Cooldown': '-'}}",
+    "history": [
+      "what is the best method to train cooking?",
+      "what is the stats for the player hoom pk?",
+      "what is his account info?"
+    ],
+    "last_username": "hoom pk"
+  }
+}

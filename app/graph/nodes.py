@@ -38,7 +38,7 @@ def chat_node(state: TypedDict) -> TypedDict:
         history=state.get('history', [])
     )
 
-    history = state.get('history', [])
+    history = list(state.get('history', []))
     history.append(state['question'])
 
 
@@ -56,14 +56,18 @@ def rag_node(state: TypedDict) -> TypedDict:
         )
     )
 
+    history = list(state.get('history', []))
+    history.append(state['question'])
+
     if not response.success:
         chat_result = chat_agent.run(
-            ChatInput(question=state['question'])
+            ChatInput(question=state['question']),
+            history=history
         )
 
-        return {**state, "response": chat_result.answer}
+        return {**state, "response": chat_result.answer, "history": history}
     
-    return {**state, "response": response.answer}
+    return {**state, "response": response.answer, "history": history}
 
 def tool_node(state: TypedDict) -> TypedDict:
     question = state['question']
@@ -82,10 +86,18 @@ def tool_node(state: TypedDict) -> TypedDict:
         
     )
 
+    history = list(state.get('history', []))
+    history.append(question)
+
     if not response.success:
         return {
             **state,
             "response": f"Tool error: {response.answer}"
         }
 
-    return {**state, "response": response.answer, "last_username": username}
+    return {
+        **state, 
+        "response": response.answer, 
+        "last_username": username, 
+        "history": history
+    }
